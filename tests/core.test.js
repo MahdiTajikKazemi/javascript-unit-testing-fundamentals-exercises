@@ -1,5 +1,10 @@
 import { it, expect, describe, beforeEach } from 'vitest';
-import { getCoupons, validateUserInput, isValidUsername, canDrive } from '../src/core';
+import { 
+    getCoupons,
+    validateUserInput,
+    isValidUsername,
+    canDrive,
+    isPriceInRange } from '../src/core';
 
 describe('getCoupons', () => {
     it('should return an array of coupons', () => {
@@ -106,5 +111,21 @@ describe('getCoupons', () => {
       { age: 18, country: 'UK', result: true }
     ])('should return $result for $age, $country', ({ age, country, result }) => {
       expect(canDrive(age, country)).toBe(result);
+    });
+  });
+
+  describe('isPriceInRange', () => {
+    it.each([
+      { scenario: 'price < min', price: -10, result: false },
+      { scenario: 'price = min', price: 0, result: true },
+      {
+        scenario: 'price between min and max',
+        price: 50,
+        result: true
+      },
+      { scenario: 'price = max', price: 100, result: true },
+      { scenario: 'price > max', price: 200, result: false }
+    ])('should return $result when $scenario', ({ price, result }) => {
+      expect(isPriceInRange(price, 0, 100)).toBe(result);
     });
   });
