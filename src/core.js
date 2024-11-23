@@ -51,7 +51,9 @@ export function isPriceInRange(price, min, max) {
 export function isValidUsername(username) {
   const minLength = 5;
   const maxLength = 15;
-
+  
+  if (!username) return false;
+  
   return username.length >= minLength && username.length <= maxLength;
 }
 
