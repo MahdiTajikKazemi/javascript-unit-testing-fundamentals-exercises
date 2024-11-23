@@ -1,5 +1,5 @@
 import { it, expect, describe, beforeEach } from 'vitest';
-import { getCoupons, validateUserInput, isValidUsername } from '../src/core';
+import { getCoupons, validateUserInput, isValidUsername, canDrive } from '../src/core';
 
 describe('getCoupons', () => {
     it('should return an array of coupons', () => {
@@ -89,5 +89,22 @@ describe('getCoupons', () => {
       expect(isValidUsername(null)).toBe(false);
       expect(isValidUsername(undefined)).toBe(false);
       expect(isValidUsername(1)).toBe(false);
+    });
+  });
+
+  describe('canDrive', () => {
+    it('should return error for invalid country code', () => {
+      expect(canDrive(20, 'FR')).toMatch(/invalid/i);
+    });
+  
+    it.each([
+      { age: 15, country: 'US', result: false },
+      { age: 16, country: 'US', result: true },
+      { age: 17, country: 'US', result: true },
+      { age: 16, country: 'UK', result: false },
+      { age: 17, country: 'UK', result: true },
+      { age: 18, country: 'UK', result: true }
+    ])('should return $result for $age, $country', ({ age, country, result }) => {
+      expect(canDrive(age, country)).toBe(result);
     });
   });
